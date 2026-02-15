@@ -50,9 +50,17 @@ export default async function Home({ searchParams }: Props) {
 
   return (
     <main className="min-h-screen p-10 bg-gray-100">
-      <h1 className="text-4xl font-bold mb-6">
-        Curated Events Feed
-      </h1>
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-4xl font-bold">
+          Curated Events Feed
+        </h1>
+        <Link
+          href="/create"
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+        >
+          Create Event
+        </Link>
+      </div>
 
       {/* Search */}
       <form action="/" method="GET" className="mb-8">
