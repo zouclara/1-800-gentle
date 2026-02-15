@@ -49,20 +49,19 @@ export default async function Home({ searchParams }: Props) {
   }
 
   return (
-    <main className="min-h-screen p-10 bg-gray-100">
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-4xl font-bold">
-          Curated Events Feed
+    <main className="max-w-4xl mx-auto px-6 py-10">
+      <div className="flex items-center justify-between mb-8">
+        <h1 className="text-3xl font-semibold text-neutral-900 dark:text-neutral-100">
+          Events Feed
         </h1>
         <Link
           href="/create"
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+          className="px-4 py-2 rounded-lg bg-neutral-900 dark:bg-neutral-100 text-neutral-50 dark:text-neutral-900 text-sm font-medium hover:bg-neutral-800 dark:hover:bg-neutral-200 transition-colors duration-200"
         >
           Create Event
         </Link>
       </div>
 
-      {/* Search */}
       <form action="/" method="GET" className="mb-8">
         <input type="hidden" name="tags" value={selectedTags.join(",")} />
         <input
@@ -70,26 +69,27 @@ export default async function Home({ searchParams }: Props) {
           name="search"
           defaultValue={search}
           placeholder="Search events..."
-          className="w-full max-w-md p-3 border rounded-lg"
+          className="w-full max-w-md px-4 py-2.5 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-neutral-400 dark:focus:ring-neutral-600 transition-shadow duration-200"
         />
       </form>
 
-      {/* Active Tag Filters */}
       {selectedTags.length > 0 && (
         <div className="mb-6 flex flex-wrap items-center gap-2">
-          <span className="mr-1 text-gray-600">Filtering by:</span>
+          <span className="text-sm text-neutral-500 dark:text-neutral-400">
+            Filtering by:
+          </span>
           {selectedTags.map((tag) => (
             <Link
               key={tag}
               href={buildUrl(search, selectedTags.filter((t) => t !== tag))}
-              className="px-3 py-1 bg-blue-600 text-white rounded-full text-sm hover:bg-blue-700"
+              className="px-3 py-1 rounded-full text-sm font-medium bg-neutral-900 dark:bg-neutral-100 text-neutral-50 dark:text-neutral-900 hover:opacity-90 transition-opacity duration-200"
             >
               {tag} ×
             </Link>
           ))}
           <Link
             href={buildUrl(search, [])}
-            className="ml-2 text-sm text-gray-500 underline"
+            className="ml-2 text-sm text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300 underline transition-colors"
           >
             Clear all
           </Link>
@@ -98,25 +98,27 @@ export default async function Home({ searchParams }: Props) {
 
       <div className="space-y-4">
         {events?.length === 0 && (
-          <p className="text-gray-500">No events found.</p>
+          <p className="text-neutral-500 dark:text-neutral-400 text-sm">
+            No events found.
+          </p>
         )}
 
         {events?.map((event) => (
-          <div
+          <article
             key={event.id}
-            className="bg-white p-6 rounded-lg shadow"
+            className="rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6 shadow-sm hover:shadow-md hover:border-neutral-300 dark:hover:border-neutral-700 transition-all duration-200"
           >
             <Link href={`/events/${event.id}`}>
-              <h2 className="text-2xl font-semibold hover:text-blue-600">
+              <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100 hover:text-neutral-600 dark:hover:text-neutral-400 transition-colors duration-200">
                 {event.title}
               </h2>
             </Link>
 
-            <p className="text-gray-600 mt-2">
+            <p className="text-neutral-600 dark:text-neutral-400 mt-2 text-sm leading-relaxed">
               {event.description}
             </p>
 
-            <div className="mt-3 flex gap-2 flex-wrap">
+            <div className="mt-4 flex gap-2 flex-wrap">
               {event.tags?.map((t: string) => {
                 const isActive = selectedTags.includes(t);
                 const nextTags = isActive
@@ -126,18 +128,18 @@ export default async function Home({ searchParams }: Props) {
                   <Link
                     key={t}
                     href={buildUrl(search, nextTags)}
-                    className={`px-3 py-1 text-sm rounded-full ${
+                    className={`px-3 py-1 text-sm rounded-full transition-colors duration-200 ${
                       isActive
-                        ? "bg-blue-600 text-white"
-                        : "bg-blue-100 text-blue-700"
-                    } hover:opacity-90`}
+                        ? "bg-neutral-900 dark:bg-neutral-100 text-neutral-50 dark:text-neutral-900"
+                        : "bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-700"
+                    }`}
                   >
                     {t}
                   </Link>
                 );
               })}
             </div>
-          </div>
+          </article>
         ))}
       </div>
     </main>

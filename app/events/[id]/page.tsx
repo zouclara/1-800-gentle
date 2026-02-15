@@ -1,7 +1,7 @@
 import { supabase } from "@/lib/supabase";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { CommentForm } from "./CommentForm";
+import { CommentsSection } from "./CommentsSection";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -27,25 +27,32 @@ export default async function EventPage({ params }: Props) {
   }
 
   return (
-    <main className="min-h-screen p-10 bg-gray-100">
+    <main className="max-w-4xl mx-auto px-6 py-10">
       <Link
         href="/"
-        className="text-sm text-gray-600 hover:text-gray-800 mb-6 inline-block"
+        className="text-sm text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300 mb-6 inline-block transition-colors"
       >
         ← Back to feed
       </Link>
 
-      <article className="bg-white p-6 rounded-lg shadow mb-8">
-        <h1 className="text-3xl font-bold">{event.title}</h1>
+      <article className="rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6 shadow-sm mb-8">
+        <h1 className="text-2xl font-semibold text-neutral-900 dark:text-neutral-100">
+          {event.title}
+        </h1>
+        <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-2">
+          Created {new Date(event.created_at).toLocaleDateString()}
+        </p>
         {event.description && (
-          <p className="text-gray-600 mt-4">{event.description}</p>
+          <p className="text-neutral-600 dark:text-neutral-400 mt-4 leading-relaxed">
+            {event.description}
+          </p>
         )}
         {event.tags?.length > 0 && (
           <div className="mt-4 flex gap-2 flex-wrap">
             {event.tags.map((t: string) => (
               <span
                 key={t}
-                className="px-3 py-1 text-sm rounded-full bg-blue-100 text-blue-700"
+                className="px-3 py-1 text-sm rounded-full bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300"
               >
                 {t}
               </span>
@@ -54,26 +61,7 @@ export default async function EventPage({ params }: Props) {
         )}
       </article>
 
-      <section>
-        <h2 className="text-xl font-semibold mb-4">Comments</h2>
-        <CommentForm eventId={id} />
-        <div className="mt-6 space-y-4">
-          {comments?.length === 0 && (
-            <p className="text-gray-500 text-sm">No comments yet.</p>
-          )}
-          {comments?.map((comment) => (
-            <div
-              key={comment.id}
-              className="bg-white p-4 rounded-lg shadow-sm border-l-4 border-blue-200"
-            >
-              <p className="text-gray-800">{comment.content}</p>
-              <p className="text-xs text-gray-500 mt-2">
-                {new Date(comment.created_at).toLocaleString()}
-              </p>
-            </div>
-          ))}
-        </div>
-      </section>
+      <CommentsSection eventId={id} comments={comments ?? []} />
     </main>
   );
 }
