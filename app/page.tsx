@@ -106,9 +106,11 @@ export default async function Home({ searchParams }: Props) {
             key={event.id}
             className="bg-white p-6 rounded-lg shadow"
           >
-            <h2 className="text-2xl font-semibold">
-              {event.title}
-            </h2>
+            <Link href={`/events/${event.id}`}>
+              <h2 className="text-2xl font-semibold hover:text-blue-600">
+                {event.title}
+              </h2>
+            </Link>
 
             <p className="text-gray-600 mt-2">
               {event.description}
