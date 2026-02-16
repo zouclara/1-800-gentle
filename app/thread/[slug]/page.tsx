@@ -1,6 +1,7 @@
 import { supabase } from "@/lib/supabase";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { SaveButton } from "@/app/components/SaveButton";
 
 interface Props {
   params: Promise<{
@@ -34,9 +35,12 @@ export default async function ThreadDetailPage({ params }: Props) {
 
       <article className="bg-white dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-800 p-8">
         <header className="mb-6">
-          <h1 className="text-4xl font-bold text-neutral-900 dark:text-neutral-100 mb-4">
-            {thread.title}
-          </h1>
+          <div className="flex items-start justify-between gap-4 mb-4">
+            <h1 className="text-4xl font-bold text-neutral-900 dark:text-neutral-100">
+              {thread.title}
+            </h1>
+            <SaveButton threadId={thread.id} />
+          </div>
 
           <div className="flex items-center gap-4 text-sm text-neutral-500 dark:text-neutral-400">
             <time dateTime={thread.created_at}>
