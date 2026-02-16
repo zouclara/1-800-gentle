@@ -1,146 +1,78 @@
-import { supabase } from "@/lib/supabase";
-import Link from "next/link";
+"use client";
 
-interface Props {
-  searchParams: Promise<{
-    search?: string;
-    tags?: string;
-  }>;
-}
+import { PhoneOutgoing } from "lucide-react";
+import { motion } from "framer-motion";
 
-function buildUrl(search: string, tags: string[]) {
-  const params = new URLSearchParams();
-  if (search) params.set("search", search);
-  if (tags.length) params.set("tags", tags.join(","));
-  const q = params.toString();
-  return q ? `/?${q}` : "/";
-}
-
-export default async function Home({ searchParams }: Props) {
-  const params = await searchParams;
-  const search = params.search ?? "";
-  const selectedTags = (params.tags ?? "")
-    .split(",")
-    .map((t) => t.trim())
-    .filter(Boolean);
-
-  let query = supabase.from("events").select("*");
-
-  if (search) {
-    query = query.or(
-      `title.ilike.%${search}%,tags.cs.${JSON.stringify([search])}`
-    );
-  }
-
-  if (selectedTags.length > 0) {
-    const orConditions = selectedTags
-      .map((t) => `tags.cs.${JSON.stringify([t])}`)
-      .join(",");
-    query = query.or(orConditions);
-  }
-
-  const { data: events, error } = await query.order(
-    "created_at",
-    { ascending: false }
-  );
-
-  if (error) {
-    console.error(error);
-  }
-
+export default function Home() {
   return (
-    <main className="max-w-4xl mx-auto px-6 py-10">
-      <div className="flex items-center justify-between mb-8">
-        <h1 className="text-3xl font-semibold text-neutral-900 dark:text-neutral-100">
-          Events Feed
-        </h1>
-        <Link
-          href="/create"
-          className="px-4 py-2 rounded-lg bg-neutral-900 dark:bg-neutral-100 text-neutral-50 dark:text-neutral-900 text-sm font-medium hover:bg-neutral-800 dark:hover:bg-neutral-200 transition-colors duration-200"
+    <main className="min-h-screen flex items-center justify-center bg-gradient-to-b from-blue-100 via-sky-50 to-white px-6">
+      <div className="flex flex-col items-center gap-8 max-w-2xl w-full">
+        {/* Animated Phone Icon Container */}
+        <motion.div
+          className="bg-white rounded-2xl p-6 shadow-lg"
+          animate={{
+            rotate: [0, -3, 3, -3, 0],
+            scale: [1, 1.05, 1, 1.05, 1],
+          }}
+          transition={{
+            duration: 3,
+            ease: "easeInOut",
+            repeat: Infinity,
+            repeatDelay: 2,
+          }}
         >
-          Create Event
-        </Link>
-      </div>
+          <PhoneOutgoing className="w-16 h-16 text-blue-400" strokeWidth={1.5} />
+        </motion.div>
 
-      <form action="/" method="GET" className="mb-8">
-        <input type="hidden" name="tags" value={selectedTags.join(",")} />
-        <input
-          type="text"
-          name="search"
-          defaultValue={search}
-          placeholder="Search events..."
-          className="w-full max-w-md px-4 py-2.5 rounded-lg border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-neutral-400 dark:focus:ring-neutral-600 transition-shadow duration-200"
-        />
-      </form>
+        {/* Brand Name */}
+        <h1 className="text-5xl md:text-6xl font-light text-slate-800 tracking-tight drop-shadow-sm">
+          1-800-GENTLE
+        </h1>
 
-      {selectedTags.length > 0 && (
-        <div className="mb-6 flex flex-wrap items-center gap-2">
-          <span className="text-sm text-neutral-500 dark:text-neutral-400">
-            Filtering by:
-          </span>
-          {selectedTags.map((tag) => (
-            <Link
-              key={tag}
-              href={buildUrl(search, selectedTags.filter((t) => t !== tag))}
-              className="px-3 py-1 rounded-full text-sm font-medium bg-neutral-900 dark:bg-neutral-100 text-neutral-50 dark:text-neutral-900 hover:opacity-90 transition-opacity duration-200"
+        {/* Divider */}
+        <div className="w-24 h-px bg-slate-300" />
+
+        {/* Coming Soon Text */}
+        <p className="text-sm md:text-base uppercase tracking-[0.25em] text-slate-500 font-light">
+          Coming Soon
+        </p>
+
+        {/* Collapsible Definition Section */}
+        <details className="w-full mt-4 group">
+          <summary className="cursor-pointer text-center text-blue-600 hover:text-blue-700 font-medium text-sm list-none flex items-center justify-center gap-2">
+            <span>Why "1-800-GENTLE"?</span>
+            <svg
+              className="w-4 h-4 transition-transform group-open:rotate-180"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
             >
-              {tag} ×
-            </Link>
-          ))}
-          <Link
-            href={buildUrl(search, [])}
-            className="ml-2 text-sm text-neutral-500 dark:text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300 underline transition-colors"
-          >
-            Clear all
-          </Link>
-        </div>
-      )}
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </summary>
 
-      <div className="space-y-4">
-        {events?.length === 0 && (
-          <p className="text-neutral-500 dark:text-neutral-400 text-sm">
-            No events found.
-          </p>
-        )}
+          <div className="mt-6 bg-white rounded-xl border border-slate-200 shadow-sm p-6 md:p-8">
+            <h2 className="text-lg font-semibold text-slate-900 mb-4">
+              Why "1-800-GENTLE"?
+            </h2>
 
-        {events?.map((event) => (
-          <article
-            key={event.id}
-            className="rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6 shadow-sm hover:shadow-md hover:border-neutral-300 dark:hover:border-neutral-700 transition-all duration-200"
-          >
-            <Link href={`/events/${event.id}`}>
-              <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100 hover:text-neutral-600 dark:hover:text-neutral-400 transition-colors duration-200">
-                {event.title}
-              </h2>
-            </Link>
+            <div className="space-y-4 text-slate-700 leading-relaxed">
+              <p>
+                Toll-free numbers were built on the promise of providing accessible information over the phone.
+                We are reclaiming that idea by creating a resource where dialing in connects you not to a business,
+                but to peers navigating similar industries, roles, and stages of life.
+              </p>
 
-            <p className="text-neutral-600 dark:text-neutral-400 mt-2 text-sm leading-relaxed">
-              {event.description}
-            </p>
+              <p>
+                1-800-GENTLE is a shared resource of lived experiences. Accessible. Human.
+              </p>
 
-            <div className="mt-4 flex gap-2 flex-wrap">
-              {event.tags?.map((t: string) => {
-                const isActive = selectedTags.includes(t);
-                const nextTags = isActive
-                  ? selectedTags.filter((tag) => tag !== t)
-                  : [...selectedTags, t];
-                return (
-                  <Link
-                    key={t}
-                    href={buildUrl(search, nextTags)}
-                    className={`px-3 py-1 text-sm rounded-full transition-colors duration-200 ${
-                      isActive
-                        ? "bg-neutral-900 dark:bg-neutral-100 text-neutral-50 dark:text-neutral-900"
-                        : "bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-700"
-                    }`}
-                  >
-                    {t}
-                  </Link>
-                );
-              })}
+              <p>
+                GENTLE is steady, disciplined, intentional change. Because growth comes from a place of reflection and initiative.
+              </p>
             </div>
-          </article>
-        ))}
+          </div>
+        </details>
       </div>
     </main>
   );
