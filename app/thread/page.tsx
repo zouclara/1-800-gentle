@@ -13,10 +13,10 @@ function buildUrl(search: string, tags: string[]) {
   if (search) params.set("search", search);
   if (tags.length) params.set("tags", tags.join(","));
   const q = params.toString();
-  return q ? `/feed?${q}` : "/feed";
+  return q ? `/thread?${q}` : "/thread";
 }
 
-export default async function Feed({ searchParams }: Props) {
+export default async function Thread({ searchParams }: Props) {
   const params = await searchParams;
   const search = params.search ?? "";
   const selectedTags = (params.tags ?? "")
@@ -55,14 +55,14 @@ export default async function Feed({ searchParams }: Props) {
           Threads
         </h1>
         <Link
-          href="/create"
+          href="/thread/new"
           className="px-4 py-2 rounded-lg bg-neutral-900 dark:bg-neutral-100 text-neutral-50 dark:text-neutral-900 text-sm font-medium hover:bg-neutral-800 dark:hover:bg-neutral-200 transition-colors duration-200"
         >
           Create Thread
         </Link>
       </div>
 
-      <form action="/feed" method="GET" className="mb-8">
+      <form action="/thread" method="GET" className="mb-8">
         <input type="hidden" name="tags" value={selectedTags.join(",")} />
         <input
           type="text"
@@ -108,7 +108,7 @@ export default async function Feed({ searchParams }: Props) {
             key={event.id}
             className="rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 p-6 shadow-sm hover:shadow-md hover:border-neutral-300 dark:hover:border-neutral-700 transition-all duration-200"
           >
-            <Link href={`/events/${event.id}`}>
+            <Link href={`/thread/${event.slug || event.id}`}>
               <h2 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100 hover:text-neutral-600 dark:hover:text-neutral-400 transition-colors duration-200">
                 {event.title}
               </h2>

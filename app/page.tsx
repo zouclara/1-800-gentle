@@ -1,6 +1,6 @@
 "use client";
 
-import { PhoneOutgoing } from "lucide-react";
+import { PhoneIncoming } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function Home() {
@@ -21,7 +21,7 @@ export default function Home() {
             repeatDelay: 2,
           }}
         >
-          <PhoneOutgoing className="w-16 h-16 text-blue-400" strokeWidth={1.5} />
+          <PhoneIncoming className="w-16 h-16 text-blue-400" strokeWidth={1.5} />
         </motion.div>
 
         {/* Brand Name */}

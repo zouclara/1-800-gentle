@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { PhoneIncoming } from "lucide-react";
 
 interface Section {
   id: string;
@@ -199,11 +200,12 @@ export function AboutRotaryDial() {
               {/* Center Circle */}
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="w-32 h-32 rounded-full bg-white dark:bg-neutral-900 border-2 border-neutral-300 dark:border-neutral-700 shadow-lg flex items-center justify-center">
-                  <div className="text-center">
-                    <div className="text-4xl font-light text-neutral-400 dark:text-neutral-600">
-                      1800
-                    </div>
-                    <div className="text-xs uppercase tracking-wider text-neutral-400 dark:text-neutral-600 mt-1">
+                  <div className="text-center flex flex-col items-center gap-1">
+                    <PhoneIncoming
+                      className="w-8 h-8 text-neutral-400 dark:text-neutral-600"
+                      strokeWidth={1.5}
+                    />
+                    <div className="text-xs uppercase tracking-wider text-neutral-400 dark:text-neutral-600">
                       Dial In
                     </div>
                   </div>
