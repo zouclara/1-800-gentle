@@ -59,52 +59,6 @@ export function RotaryDial() {
         {/* Body / outer rim */}
         <circle r="155" fill="#f0f6ff" stroke="#bfdbfe" strokeWidth="2" />
 
-        {/* Static outer label ring — numbers + letters printed on phone body */}
-        {DIAL_DATA.map(({ num, letters }, i) => {
-          const angle = holeAngles[i];
-          const rad = (angle * Math.PI) / 180;
-
-          const numR = HOLE_RADIUS + 24;
-          const letR = HOLE_RADIUS + 38;
-
-          const nx = Math.sin(rad) * numR;
-          const ny = -Math.cos(rad) * numR;
-          const lx = Math.sin(rad) * letR;
-          const ly = -Math.cos(rad) * letR;
-
-          return (
-            <g key={`label-${num}`}>
-              {letters && (
-                <text
-                  x={lx}
-                  y={ly}
-                  textAnchor="middle"
-                  dominantBaseline="middle"
-                  fill="#475569"
-                  fontSize="6.5"
-                  fontFamily="var(--font-geist-sans), system-ui"
-                  fontWeight="500"
-                  letterSpacing="0.5"
-                >
-                  {letters}
-                </text>
-              )}
-              <text
-                x={nx}
-                y={ny}
-                textAnchor="middle"
-                dominantBaseline="middle"
-                fill="#1e3a5f"
-                fontSize="10"
-                fontFamily="var(--font-geist-sans), system-ui"
-                fontWeight="600"
-              >
-                {num}
-              </text>
-            </g>
-          );
-        })}
-
         {/* ── Rotating group ─────────────────────────────────────────── */}
         <g
           style={{
@@ -156,13 +110,59 @@ export function RotaryDial() {
                 <circle cx={cx} cy={cy} r={14.5} fill="#0f2740" />
                 {/* Subtle inner highlight */}
                 <circle cx={cx - 3.5} cy={cy - 3.5} r={4} fill="white" opacity="0.08" />
-                {/* Center dot (like real phone holes) */}
-                <circle cx={cx} cy={cy} r={1.5} fill="#1e3a5f" opacity="0.6" />
+                {/* Number on the button */}
+                <text
+                  x={cx}
+                  y={cy}
+                  textAnchor="middle"
+                  dominantBaseline="middle"
+                  fill="white"
+                  fontSize="9"
+                  fontFamily="var(--font-geist-sans), system-ui"
+                  fontWeight="500"
+                  style={{ pointerEvents: "none" }}
+                >
+                  {num}
+                </text>
               </g>
             );
           })}
         </g>
         {/* ── End rotating group ─────────────────────────────────────── */}
+
+        {/* Static outer label ring — rendered after rotating group so they paint on top */}
+        {DIAL_DATA.map(({ num, letters }, i) => {
+          const angle = holeAngles[i];
+          const rad = (angle * Math.PI) / 180;
+
+          const numR = HOLE_RADIUS + 26;
+          const letR = HOLE_RADIUS + 40;
+
+          const nx = Math.sin(rad) * numR;
+          const ny = -Math.cos(rad) * numR;
+          const lx = Math.sin(rad) * letR;
+          const ly = -Math.cos(rad) * letR;
+
+          return (
+            <g key={`label-${num}`} style={{ pointerEvents: "none" }}>
+              {letters && (
+                <text
+                  x={lx}
+                  y={ly}
+                  textAnchor="middle"
+                  dominantBaseline="middle"
+                  fill="#94a3b8"
+                  fontSize="6"
+                  fontFamily="var(--font-geist-sans), system-ui"
+                  fontWeight="400"
+                  letterSpacing="0.5"
+                >
+                  {letters}
+                </text>
+              )}
+            </g>
+          );
+        })}
 
         {/* Finger stop — fixed to body */}
         {(() => {
